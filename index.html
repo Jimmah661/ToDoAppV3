@@ -7,7 +7,7 @@
   <script src="./index.js" defer></script>
   <script src="./listener.js" defer></script>
   <script src="./DragandDrop.js" defer></script>
-  <title>ToDo List</title>
+  <title>ToDo List Version 3</title>
 </head>
 <body>
   <div class="container">
@@ -16,9 +16,20 @@
     <div class="row">
       <button id="submitButton" type="submit">Save Todo</button>
     </div>
-    <div class="swimlane">
-      <span class="swimlane-header">ToDos</span>
-      <ul id="todoList"></ul>
+    <div class="swimlaneContainer">
+      <div class="swimlane">
+        <span class="swimlane-header">ToDos</span>
+        <ul id="todoList"></ul>
+        <button class="addTodoButton">+</button>
+      </div>
+      <div class="swimlane">
+        <span class="swimlane-header">ToDos</span>
+        <ul id="todoList"></ul>
+        <button class="addTodoButton">+</button>
+      </div>
+      <div class="swimlane">
+        <button class="addTodoButton">+</button>
+      </div>
     </div>
   </div>
 

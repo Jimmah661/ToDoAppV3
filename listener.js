@@ -65,6 +65,7 @@ window.addEventListener('click', e => {
 })
 listenForChanges()
 
+// These functions convert the Swimlane Header into an input field so that you can modify the title
 function swimlaneHeaderOnclick(e) {
   var input = document.createElement("input")
   setAttributes(input, {
@@ -84,4 +85,7 @@ function swimlaneHeaderInputOnfocusout(e) {
   e.target.replaceWith(span)
 }
 
-document.querySelector(".swimlane-header").addEventListener("click", e => swimlaneHeaderOnclick(e))
+var swimlanes = [...document.querySelectorAll(".swimlane-header")]
+swimlanes.forEach(swimlane => {
+  swimlane.addEventListener("click", e => swimlaneHeaderOnclick(e))
+})
