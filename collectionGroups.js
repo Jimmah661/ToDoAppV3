@@ -54,17 +54,19 @@ database.collectionGroup("ToDos").onSnapshot(todosSnapshot => {
 
 function todoContentOnclick(e) {
   e.preventDefault()
-  var input = document.createElement("input")
-  setAttributes(input, {
-    "value": e.target.firstChild.textContent,
-    "class": "todo-content-setter",
-    "type": "text"
-    // Pulling the Parent node ID so we can update the header on unfocus
-    // "data-parentID": e.target.closest("div").id
-  })
-  input.addEventListener("focusout", (e) => todoContentInputOnfocusout(e))
-  e.target.firstChild.replaceWith(input)
-  document.querySelector(".todo-content-setter").focus()
+  if (e.target.nodeName === "LI") {
+    var input = document.createElement("input")
+    setAttributes(input, {
+      "value": e.target.firstChild.textContent,
+      "class": "todo-content-setter",
+      "type": "text"
+      // Pulling the Parent node ID so we can update the header on unfocus
+      // "data-parentID": e.target.closest("div").id
+    })
+    input.addEventListener("focusout", (e) => todoContentInputOnfocusout(e))
+    e.target.firstChild.replaceWith(input)
+    document.querySelector(".todo-content-setter").focus()
+  }
 }
 
 function todoContentInputOnfocusout(e) {
