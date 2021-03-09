@@ -5,7 +5,6 @@ database.collectionGroup("ToDos").onSnapshot(todosSnapshot => {
   todosSnapshot.docChanges().forEach(todo => {
     let parentSwimlane = document.querySelector(`#${todo.doc.ref.parent.parent.id} ul`)
 
-
     if (todo.type === 'added') {
       let todoItem = document.createElement("LI");
       setAttributes(todoItem, 
@@ -48,6 +47,11 @@ database.collectionGroup("ToDos").onSnapshot(todosSnapshot => {
 
       // Append the new list item to the UL
       parentSwimlane.appendChild(todoItem);
+    }
+    if (todo.type === "modified") {
+      let updatedTodo = document.getElementById(todo.doc.id)
+      updatedTodo.firstChild.textContent = todo.doc.data().todoContent
+      console.log(todo.doc.data())
     }
   })
 })
