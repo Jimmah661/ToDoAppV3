@@ -18,12 +18,8 @@ function setAttributes(element, attributes) {
   }
 }
 
-const container = document.querySelector("#todoList");
 
-var submitButton = document.getElementById("submitButton");
-var inputField = document.getElementById("todoInput");
-
-
+// TODO - This function can be removed as it's been migrated to the swimlaneListener.js file
 const addTodo = () => {
   var currentToDos = [...document.querySelectorAll(".todo")]
   let newTodo = {
@@ -31,18 +27,8 @@ const addTodo = () => {
     isCompleted: false,
     dateSubmitted: new Date(),
     position: currentToDos.length,
-    // Needs to specify which swimlane it's going to be in
-    // swimlane: 
   };
   database.collection('todo').add(newTodo);
   console.log('Todo Added');
   inputField.value = "";
-}
-
-const addSwimlane = () => {
-  let currentSwimlanes = [...document.querySelectorAll(".swimlane")]
-  let newSwimlane = {
-    swimlaneTitle: "Untitled",
-    swimlaneOrder: currentSwimlanes.length
-  }
 }

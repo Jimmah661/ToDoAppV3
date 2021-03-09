@@ -5,30 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="index.css" />
   <script src="./index.js" defer></script>
-  <script src="./listener.js" defer></script>
-  <script src="./DragandDrop.js" defer></script>
+  <script src="./swimlaneListener.js" defer></script>
+  <script src="./collectionGroups.js" defer></script>
+  <script src="./swimlaneDaD.js" defer></script>
   <title>ToDo List Version 3</title>
 </head>
 <body>
   <div class="container">
     <h1>Todo List Version 3</h1>
-    <input id="todoInput" placeholder="New Todo"></input>
-    <div class="row">
-      <button id="submitButton" type="submit">Save Todo</button>
-    </div>
     <div class="swimlaneContainer">
-      <div class="swimlane">
-        <span class="swimlane-header">ToDos</span>
-        <ul id="todoList"></ul>
-        <button class="addTodoButton">+</button>
-      </div>
-      <div class="swimlane">
-        <span class="swimlane-header">ToDos</span>
-        <ul id="todoList"></ul>
-        <button class="addTodoButton">+</button>
-      </div>
-      <div class="swimlane">
-        <button class="addTodoButton">+</button>
+      <div class="swimlane newSwimlane">
+        <button class="addSwimlaneButton">+</button>
       </div>
     </div>
   </div>
