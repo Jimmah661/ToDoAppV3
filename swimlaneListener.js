@@ -74,14 +74,30 @@ database.collection("swimlanes").orderBy("swimlanePosition").onSnapshot(swimlane
       swimlaneContainer.insertBefore(swimlane, document.querySelector(".newSwimlane"))
     }
     if (change.type === "modified") {
-      // update the Title os the Swimlane if the information changes in the database
-      let swimlaneTitle = document.querySelector(`#${change.doc.id} span`)
+      console.log("Modified", change.doc.id)
+      // Function to reorder the swimlane list on database modification
+      let newElement = document.querySelector("#" + CSS.escape(change.doc.id))
+      let parentElement = document.querySelector(".swimlaneContainer")
+      parentElement.insertBefore(newElement, parentElement.children[change.doc.data().swimlanePosition])
+
+      // update the Title of the Swimlane if the information changes in the database
+      let swimlaneTitle = document.querySelector(`#${CSS.escape(change.doc.id)} span`)
       if (swimlaneTitle != change.doc.data().swimlaneTitle) {
         swimlaneTitle.textContent = change.doc.data().swimlaneTitle
       }
     }
     if (change.type ==="removed") {
-      console.log("Removed", change.doc)
+      console.log("removed", change.doc.id)
+      let removedSwimlane = document.querySelector(`#${CSS.escape(change.doc.id)}`)
+      removedSwimlane.remove()
+
+      function updatePositions () {
+        let swimlaneArray = [...document.querySelectorAll(".swimlane:not(.newSwimlane)")]
+        swimlaneArray.forEach((item, index) => {
+          database.collection("swimlanes").doc(item.id).update({"swimlanePosition": index})
+        })
+      }
+      updatePositions()
     }
   })
 })
