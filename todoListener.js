@@ -1,15 +1,13 @@
-// Defining a variable here that will be used by the system to manage if a todo is being dragged or if its a swimlane
-var todoBeingDragged = false
+database.collection("todo").orderBy("todoPosition").onSnapshot(todoSnapshot => {
+  todoSnapshot.docChanges().forEach(todo => {
+    let data = todo.doc.data()
+    let id = todo.doc.id
 
-database.collectionGroup("ToDos").onSnapshot(todosSnapshot => {
-  todosSnapshot.docChanges().forEach(todo => {
-    let parentSwimlane = document.querySelector(`#${todo.doc.ref.parent.parent.id} ul`)
-
-    if (todo.type === 'added') {
+    if (todo.type === "added") {
       let todoItem = document.createElement("LI");
       setAttributes(todoItem, 
         {
-          "id": todo.doc.id,
+          "id": id,
           "draggable": true
         })
       todoItem.classList.add("todo")
@@ -18,13 +16,13 @@ database.collectionGroup("ToDos").onSnapshot(todosSnapshot => {
       // Create and append P tag with Todo content
       let textNode = document.createElement("p");
       textNode.setAttribute("class", "todoContent");
-      textNode.textContent = todo.doc.data().todoContent;
+      textNode.textContent = data.todoContent;
       todoItem.appendChild(textNode);
 
 
       // Create and Append P tag with Date content
-      if (todo.doc.data().dateSubmitted) {
-        var epochSeconds = todo.doc.data().dateSubmitted.seconds;
+      if (data.dateSubmitted) {
+        var epochSeconds = data.dateSubmitted.seconds;
         let dateNode = document.createElement("p");
         dateNode.setAttribute("class", "todoDate");
         let date = new Date(epochSeconds * 1000);
@@ -43,20 +41,25 @@ database.collectionGroup("ToDos").onSnapshot(todosSnapshot => {
         todoItem.classList.remove("dragging");
         todoBeingDragged = false;
       })
-      todoItem.addEventListener('click', (e) => todoContentOnclick(e))
+      todoItem.addEventListener('click', (e) => todoContentOnclick(e, id))
 
       // Append the new list item to the UL
+      let parentSwimlane = document.querySelector("#" + CSS.escape(data.parentSwimlane) + " ul")
       parentSwimlane.appendChild(todoItem);
-    }
-    if (todo.type === "modified") {
-      let updatedTodo = document.getElementById(todo.doc.id)
-      updatedTodo.firstChild.textContent = todo.doc.data().todoContent
-      console.log(todo.doc.data())
+    } else if (todo.type === "modified") {
+      let modifiedTodo = document.querySelector("#" + CSS.escape(id))
+      let targetSwimlane = document.querySelector("#" + CSS.escape(data.parentSwimlane) + " ul")
+      targetSwimlane.insertBefore(modifiedTodo, targetSwimlane.children[data.todoPosition])
+      modifiedTodo.firstChild.textContent = data.todoContent
+    } else if (todo.type === "deleted") {
+      let deletedTodo = document.querySelector("#" + CSS.escape(id))
+      deletedTodo.remove()
     }
   })
 })
 
-function todoContentOnclick(e) {
+
+function todoContentOnclick(e, id) {
   e.preventDefault()
   if (e.target.nodeName === "LI") {
     var input = document.createElement("input")
@@ -67,14 +70,14 @@ function todoContentOnclick(e) {
       // Pulling the Parent node ID so we can update the header on unfocus
       // "data-parentID": e.target.closest("div").id
     })
-    input.addEventListener("focusout", (e) => todoContentInputOnfocusout(e))
+    input.addEventListener("focusout", (e) => todoContentInputOnfocusout(e, id))
     e.target.firstChild.replaceWith(input)
     document.querySelector(".todo-content-setter").focus()
   }
 }
 
-function todoContentInputOnfocusout(e) {
-  database.collection("swimlanes").doc(e.target.closest(".swimlane").id).collection("ToDos").doc(e.target.closest("li").id).update({"todoContent": e.target.value})
+function todoContentInputOnfocusout(e, id) {
+  database.collection("todo").doc(id).update({"todoContent": e.target.value})
   var p = document.createElement("p");
   p.addEventListener("click", (e) => todoContentOnclick(e))
   p.textContent = e.target.value

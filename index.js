@@ -17,18 +17,3 @@ function setAttributes(element, attributes) {
     element.setAttribute(key, attributes[key])
   }
 }
-
-
-// TODO - This function can be removed as it's been migrated to the swimlaneListener.js file
-const addTodo = () => {
-  var currentToDos = [...document.querySelectorAll(".todo")]
-  let newTodo = {
-    todoContent: inputField.value,
-    isCompleted: false,
-    dateSubmitted: new Date(),
-    position: currentToDos.length,
-  };
-  database.collection('todo').add(newTodo);
-  console.log('Todo Added');
-  inputField.value = "";
-}

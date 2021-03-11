@@ -119,7 +119,6 @@ function swimlaneHeaderOnclick(e) {
 // update the swimlaneHeader when unfocusing from the input field
 function swimlaneHeaderInputOnfocusout(e) {
   database.collection("swimlanes").doc(e.target.dataset.parentid).update({"swimlaneTitle": e.target.value})
-  // console.log(e.target.value)
   var span = document.createElement("span");
   span.addEventListener("click", (e) => swimlaneHeaderOnclick(e))
   span.append(e.target.value)
@@ -140,13 +139,14 @@ document.querySelector('.addSwimlaneButton').addEventListener("click", () => {
 
 // Function generates a new Todo card in the swimlane
 function newTodo (swimlaneID) {
-  let currentSwimlane = document.querySelector(`#${swimlaneID}`)
+  let currentSwimlane = document.querySelector("#" + CSS.escape(swimlaneID))
   let currentSwinlaneTodos = [...currentSwimlane.querySelectorAll('.todo')]
   let newTodo = {
     dateSubmitted: new Date(),
-    position: currentSwinlaneTodos.length,
+    todoPosition: currentSwinlaneTodos.length,
     todoContent: "New Card",
-    isCompleted: false
+    isCompleted: false,
+    parentSwimlane: swimlaneID
   }
-  database.collection("swimlanes").doc(swimlaneID).collection("ToDos").add(newTodo)
+  database.collection("todo").add(newTodo)
 }
