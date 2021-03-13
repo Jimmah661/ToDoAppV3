@@ -1,3 +1,5 @@
+var todoBeingDragged = false;
+
 database.collection("todo").orderBy("todoPosition").onSnapshot(todoSnapshot => {
   todoSnapshot.docChanges().forEach(todo => {
     let data = todo.doc.data()
